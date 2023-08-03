@@ -1,0 +1,22 @@
+---
+
+- hosts: devlinux[0]
+  user: velocity
+  become: yes
+  connection: ssh
+
+  tasks:
+    - name: install Git
+      action: yum name=git state=present
+
+- hosts: devlinux[1]
+  user: velocity
+  become: yes
+  connection: ssh
+
+  tasks:
+    - name: install tree
+      action: yum name=tree state=present
+
+    - name: install docker
+      action: yum name=docker state=present

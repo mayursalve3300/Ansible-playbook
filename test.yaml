@@ -1,0 +1,11 @@
+---
+
+- hosts: devlinux
+  user: velocity
+  become: yes
+  connection: ssh
+  gather_facts: yes
+
+  tasks:
+    - name: install tree
+      action: yum name=tree state=present
