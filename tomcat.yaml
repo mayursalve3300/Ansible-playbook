@@ -1,0 +1,30 @@
+---
+- hosts: devlinux[1]
+  user: velocity
+  connection: ssh
+  become: yes
+
+  tasks:
+    - name: update repo
+      action: yum name=* state=latest
+
+    - name: install JDK
+      action: yum name=java-1.8.0-openjdk state=present
+
+    - name: Download tomcat
+      action: get_url url=https://dlcdn.apache.org/tomcat/tomcat-8/v8.5.91/bin/apache-tomcat-8.5.91.tar.gz dest=/usr/local
+
+    - name: Extracting tomcat
+      unarchive: 
+        src: "/usr/local/apache-tomcat-8.5.91.tar.gz" 
+        dest: /usr/local
+        remote_src: yes
+    
+    - name: change permission
+      file: path=/usr/local/apache-tomcat-8.5.91 mode=777 state=directory recurse=yes
+
+    - name: deploy war
+      action: copy src=sample.war dest=/usr/local/apache-tomcat-8.5.91/webapps
+
+    - name: start the tomcat
+      shell: nohup /usr/local/apache-tomcat-8.5.91/bin/startup.sh &
